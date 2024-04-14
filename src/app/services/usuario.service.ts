@@ -44,11 +44,15 @@ export class UsuarioService {
   logout() {
     localStorage.removeItem('token');
 
-    google.accounts.id.revoke('gutierrez.paul@pucp.pe', () => {
-      this.ngZone.run(() => {
-        this.router.navigateByUrl('/login');
+    if(this.usuario?.google) {
+      google.accounts.id.revoke('gutierrez.paul@pucp.pe', () => {
+        this.ngZone.run(() => {
+          this.router.navigateByUrl('/login');
+        })
       })
-    })
+    } else {
+      this.router.navigateByUrl('/login');
+    }
   }
 
   validarToken(): Observable<boolean> {
