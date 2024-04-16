@@ -21,6 +21,7 @@ export class ModalImagenService {
   constructor() { }
 
   abrirModal(tipo: 'usuarios' | 'medicos' | 'hospitales', id?: string, img: string = 'no-img') {
+    console.log(img);
     this._ocultarModal = false;
     this.tipo = tipo;
     this.id = id;

@@ -40,9 +40,9 @@ export class ModalImagenComponent {
     const id = this.modalImagenService.id;
     const tipo = this.modalImagenService.tipo;
 
-    if(this.imagenSubir && id) {
+    if(this.imagenSubir && id && tipo) {
       this.fileUploadService
-      .actualizarFoto(this.imagenSubir, 'usuarios', id)
+      .actualizarFoto(this.imagenSubir, tipo, id)
       .then(img => {
         Swal.fire('Cambiado', 'Se cambió la imagen de perfil', 'success');
         this.modalImagenService.nuevaImagen.emit(img);
