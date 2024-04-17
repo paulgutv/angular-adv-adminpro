@@ -29,6 +29,14 @@ export class UsuarioService {
     return localStorage.getItem('token') || '';
   }
 
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE' {
+    if (this.usuario && this.usuario.role) {
+      return this.usuario.role;
+    } else {
+      return 'USER_ROLE'
+    }
+  }
+
   get uid(): string {
     return this.usuario?.uid || '';
   }
@@ -41,8 +49,14 @@ export class UsuarioService {
     }
   }
 
+  guardarLocalStorage(token: string, menu: any){
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
+  }
+
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
 
     if(this.usuario?.google) {
       google.accounts.id.revoke('gutierrez.paul@pucp.pe', () => {
@@ -64,7 +78,7 @@ export class UsuarioService {
       map((resp: any) => {
         const { email, google, nombre, role, img, uid } = resp.usuario;
         this.usuario = new Usuario(nombre, email, '', img, google, role, uid);
-        localStorage.setItem('token', resp.token)
+        this.guardarLocalStorage(resp.token, resp.menu);
         return true;
       }),
       map(resp => true),
@@ -76,7 +90,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/usuarios`, formData)
     .pipe(
       tap((resp: any) => {
-        localStorage.setItem('token', resp.token)
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     )
   }
@@ -93,7 +107,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login`, formData)
     .pipe(
       tap((resp: any) => {
-        localStorage.setItem('token', resp.token)
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     )
   }
@@ -102,7 +116,7 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, { token })
     .pipe(
       tap((resp: any) => {
-        localStorage.setItem('token', resp.token)
+        this.guardarLocalStorage(resp.token, resp.menu);
       })
     )
   }

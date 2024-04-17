@@ -10,12 +10,10 @@ import { Usuario } from '../../models/usuario.model';
 })
 export class SidebarComponent {
 
-  public menuItems: any[] = [];
-  private sidebarService = inject(SidebarService);
+  public sidebarService = inject(SidebarService);
   private usuarioService = inject(UsuarioService);
   public usuario?: Usuario;
   constructor() {
-    this.menuItems = this.sidebarService.menu;
     this.usuario = this.usuarioService.usuario;
   }
 
